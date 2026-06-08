@@ -28,7 +28,7 @@ import streamlit as st
 from Backend.document_loader import load_pdf, load_url, load_text
 from Backend.rag_pipeline import create_vector_store, build_rag_chain
 
-st.write("APP STARTED")
+st.write("APP STARTED")  #
 
 # ──────────────────────────────────────────────────────────────
 # PAGE CONFIGURATION
