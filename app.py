@@ -25,22 +25,18 @@ FEATURES:
 
 import streamlit as st
 
-from Backend.document_loader import load_pdf, load_url, load_text
-from Backend.rag_pipeline import create_vector_store, build_rag_chain
-
-st.write("APP STARTED")  #
-
-# ──────────────────────────────────────────────────────────────
-# PAGE CONFIGURATION
-# ──────────────────────────────────────────────────────────────
-
+# ── PAGE CONFIG must be FIRST streamlit command ──
 st.set_page_config(
     page_title="DocMind – Multi-Source RAG",
     page_icon="🧠",
     layout="wide"
 )
 
-st.title("DocMind")
+# All other imports AFTER set_page_config
+from Backend.document_loader import load_pdf, load_url, load_text
+from Backend.rag_pipeline import create_vector_store, build_rag_chain
+
+st.title("🧠 DocMind")
 st.caption("Multi-source RAG chatbot — load PDFs, URLs, or plain text, then ask anything.")
 
 
