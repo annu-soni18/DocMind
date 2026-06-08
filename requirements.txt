@@ -14,5 +14,4 @@ pymupdf==1.26.0
 beautifulsoup4==4.13.4
 lxml
 requests
-langchain-huggingface
-sentence-transformers
+
