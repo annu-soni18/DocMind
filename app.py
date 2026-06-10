@@ -1,27 +1,3 @@
-"""
-app.py
-------
-DocMind — Multi-Source RAG Chatbot
-Entry point for the Streamlit application.
-
-HOW TO RUN LOCALLY:
-    1. Create a .env file (copy .env.example and fill in your keys)
-    2. pip install -r requirements.txt
-    3. streamlit run app.py
-
-HOW TO DEPLOY ON RENDER:
-    Start Command: streamlit run app.py --server.port $PORT --server.address 0.0.0.0
-    Environment Variables: GROQ_API_KEY, OPENAI_API_KEY
-
-FEATURES:
-    - Upload one or more PDF files
-    - Add a webpage URL
-    - Paste raw text
-    - All sources are merged into one FAISS vector store
-    - Chat answers cite which document they came from
-    - Full chat history preserved during the session
-    - Streaming responses (token by token)
-"""
 
 import streamlit as st
 

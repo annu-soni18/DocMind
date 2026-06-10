@@ -54,7 +54,7 @@ def load_url(url: str) -> list[Document]:
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()     # raises for 4xx / 5xx HTTP errors
 
-        # Parse HTML with lxml parser (faster than html.parser, installed via requirements.txt)
+        
         soup = BeautifulSoup(response.text, "lxml")
 
         # Remove non-content tags before extracting text
