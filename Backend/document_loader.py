@@ -1,30 +1,15 @@
 
-import fitz                          # PyMuPDF — installed as 'pymupdf', imported as 'fitz'
+import fitz                          
 import requests
 from bs4 import BeautifulSoup
-from langchain_core.documents import Document   # standard LangChain document object
-
+from langchain_core.documents import Document   
 
 # ──────────────────────────────────────────────────────────────
 # 1. PDF LOADER
 # ──────────────────────────────────────────────────────────────
 
 def load_pdf(uploaded_file) -> list[Document]:
-    """
-    Reads a Streamlit-uploaded PDF and returns one Document per page.
-
-    Args:
-        uploaded_file: Streamlit UploadedFile object from st.file_uploader()
-
-    Returns:
-        List of Document objects, one per non-blank page.
-
-    INTERVIEW POINT:
-        We create one Document per page (not the whole file as one Document)
-        because it makes chunking more natural — page boundaries are
-        logical break points in a document.
-        Metadata stores both filename and page number for precise citations.
-    """
+   
     documents = []
 
     # Read raw bytes from the Streamlit uploader
@@ -55,22 +40,7 @@ def load_pdf(uploaded_file) -> list[Document]:
 # ──────────────────────────────────────────────────────────────
 
 def load_url(url: str) -> list[Document]:
-    """
-    Fetches a webpage and extracts readable text, ignoring navigation/scripts.
-
-    Args:
-        url: Full URL string (e.g. "https://en.wikipedia.org/wiki/RAG")
-
-    Returns:
-        A single-item list with one Document containing the page text.
-
-    INTERVIEW POINT:
-        We manually use requests + BeautifulSoup instead of LangChain's
-        WebBaseLoader because it gives us full control over:
-          - Custom User-Agent headers (some sites block bots)
-          - Filtering out nav/footer/script noise
-          - Timeout and error handling for deployment on Render
-    """
+    
     try:
         headers = {
             # Without this, many websites return 403 Forbidden
@@ -121,21 +91,7 @@ def load_url(url: str) -> list[Document]:
 # ──────────────────────────────────────────────────────────────
 
 def load_text(text: str, label: str = "Pasted Text") -> list[Document]:
-    """
-    Wraps a plain text string into a LangChain Document.
-
-    Args:
-        text:  The raw text content.
-        label: A human-readable name shown in citations.
-
-    Returns:
-        A single-item list with one Document.
-
-    INTERVIEW POINT:
-        Even raw text gets wrapped in a Document with metadata.
-        This is the same structure as PDF/URL output, so the rest of the
-        pipeline (rag_pipeline.py) treats all sources identically.
-    """
+   
     if not text.strip():
         raise ValueError("Text input is empty. Please paste some content.")
 
