@@ -39,8 +39,7 @@ def create_vector_store(documents: list[Document]) -> FAISS:
             "Please check that your PDFs contain text (not just images)."
         )
 
-    # FAISS.from_documents() calls the embeddings model for every chunk
-    # and builds the search index in one shot
+    
     vector_store = FAISS.from_documents(chunks, embeddings)
     return vector_store
 
@@ -67,7 +66,7 @@ def format_docs_with_sources(docs: list[Document]) -> str:
             f"[Source: {source_label}]\n{doc.page_content}"
         )
 
-    # Separate chunks with a clear divider so the LLM can distinguish them
+    
     return "\n\n---\n\n".join(formatted)
 
 
@@ -83,14 +82,12 @@ def build_rag_chain(vector_store: FAISS):
     retriever = vector_store.as_retriever(
         search_type="mmr",
         search_kwargs={
-            "k":       4,    # final number of chunks returned to the LLM
-            "fetch_k": 10    # candidates considered before MMR filtering
+            "k":       4,    
+            "fetch_k": 10    
         }
     )
 
-    # Build the chain using LCEL pipe syntax
-    # RunnablePassthrough() passes the user question through unchanged
-    # RunnableLambda() wraps our custom format function as a chain step
+   
     rag_chain = (
         {
             "context":  retriever | RunnableLambda(format_docs_with_sources),
