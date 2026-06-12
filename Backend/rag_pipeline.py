@@ -9,9 +9,8 @@ from Models.llm_model import load_embeddings, load_llm
 from Prompt.prompt_template import get_prompt
 
 
-# ──────────────────────────────────────────────────────────────
+
 # STEP 1: Chunk documents
-# ──────────────────────────────────────────────────────────────
 
 def chunk_documents(documents: list[Document]) -> list[Document]:
     
@@ -24,9 +23,8 @@ def chunk_documents(documents: list[Document]) -> list[Document]:
     return chunks
 
 
-# ──────────────────────────────────────────────────────────────
+
 # STEP 2: Build FAISS vector store
-# ──────────────────────────────────────────────────────────────
 
 def create_vector_store(documents: list[Document]) -> FAISS:
     
@@ -44,9 +42,9 @@ def create_vector_store(documents: list[Document]) -> FAISS:
     return vector_store
 
 
-# ──────────────────────────────────────────────────────────────
+
 # STEP 3: Format retrieved chunks for the prompt
-# ──────────────────────────────────────────────────────────────
+
 
 def format_docs_with_sources(docs: list[Document]) -> str:
    
@@ -70,9 +68,8 @@ def format_docs_with_sources(docs: list[Document]) -> str:
     return "\n\n---\n\n".join(formatted)
 
 
-# ──────────────────────────────────────────────────────────────
 # STEP 4: Build the full RAG chain
-# ──────────────────────────────────────────────────────────────
+
 
 def build_rag_chain(vector_store: FAISS):
     

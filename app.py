@@ -1,31 +1,41 @@
 
 import streamlit as st
 
-# ── PAGE CONFIG must be FIRST streamlit command ──
+
 st.set_page_config(
     page_title="DocMind – Multi-Source RAG",
-    page_icon="🧠",
+    page_icon="",
     layout="wide"
 )
 
-# All other imports AFTER set_page_config
+
 from Backend.document_loader import load_pdf, load_url, load_text
 from Backend.rag_pipeline import create_vector_store, build_rag_chain
 
-st.title("DocMind")
-st.caption("Multi-source RAG chatbot — load PDFs, URLs, or plain text, then ask anything.")
+st.markdown(
+    "<h2 style='text-align: center;'>DocMind</h2>",
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    """
+    <div style="text-align: center; color: gray;">
+        Multi-source RAG chatbot — load PDFs, URLs, or plain text, then ask anything.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 
-# ──────────────────────────────────────────────────────────────
+
 # SESSION STATE
-# All variables that must survive Streamlit reruns go here.
-# ──────────────────────────────────────────────────────────────
+
 
 defaults = {
-    "messages":       [],    # chat history: [{"role": "user/assistant", "content": "..."}]
-    "vector_store":   None,  # FAISS index built from loaded documents
-    "rag_chain":      None,  # full LangChain RAG chain
-    "loaded_sources": [],    # human-readable list of what was loaded (shown in sidebar)
+    "messages":       [],    
+    "vector_store":   None,  
+    "rag_chain":      None,  
+    "loaded_sources": [],    
 }
 
 for key, value in defaults.items():
@@ -33,15 +43,15 @@ for key, value in defaults.items():
         st.session_state[key] = value
 
 
-# ──────────────────────────────────────────────────────────────
-# SIDEBAR — Document Loading
-# ──────────────────────────────────────────────────────────────
+
+# SIDEBAR — Document Loader
+
 
 with st.sidebar:
     st.header("Load Your Documents")
     st.markdown("Add one or more sources below, then click **Build Knowledge Base**.")
 
-    # ── Source 1: PDF Upload ──────────────────────────────────
+    # ── Source 1: PDF Upload 
     st.subheader("Upload PDF(s)")
     uploaded_files = st.file_uploader(
         "Choose PDF files",
@@ -50,14 +60,14 @@ with st.sidebar:
         help="You can upload multiple PDFs at once. Each page becomes a separate chunk."
     )
 
-    # ── Source 2: URL ─────────────────────────────────────────
+    # ── Source 2: URL 
     st.subheader("Add a Webpage URL")
     url_input = st.text_input(
         "Paste a URL",
         placeholder="https://en.wikipedia.org/wiki/Retrieval-augmented_generation"
     )
 
-    # ── Source 3: Raw Text ────────────────────────────────────
+    # ── Source 3: Raw Text 
     st.subheader("Paste Text")
     text_input = st.text_area(
         "Paste any text content",
@@ -67,7 +77,7 @@ with st.sidebar:
 
     st.divider()
 
-    # ── Build Button ──────────────────────────────────────────
+    # ── Build Button 
     build_clicked = st.button("Build Knowledge Base", use_container_width=True)
 
     if build_clicked:
@@ -140,14 +150,20 @@ with st.sidebar:
             st.rerun()
 
 
-# ──────────────────────────────────────────────────────────────
-# MAIN AREA — Chat Interface
-# ──────────────────────────────────────────────────────────────
 
-# If no knowledge base is built yet, show a prompt and stop
+# MAIN AREA — Chat Interface
+
+
+
 if not st.session_state.rag_chain:
-    st.info(
-        "Use the sidebar to load your documents, then click **Build Knowledge Base** to start chatting."
+    st.markdown(
+        """
+        <div style="text-align:center;">
+             Use the sidebar to load your documents, then click
+            <b>Build Knowledge Base</b> to start chatting.
+        </div>
+        """,
+        unsafe_allow_html=True
     )
     st.stop()
 
@@ -173,12 +189,10 @@ if question:
         placeholder   = st.empty()
 
         try:
-            # .stream() yields string tokens one at a time
-            # We accumulate them and update the placeholder each time
-            # This creates the "typing" effect in the UI
+            
             for token in st.session_state.rag_chain.stream(question):
                 full_response += token
-                placeholder.markdown(full_response + "▌")  # ▌ acts as blinking cursor
+                placeholder.markdown(full_response + "▌")  
 
             # Final render without the cursor
             placeholder.markdown(full_response)
