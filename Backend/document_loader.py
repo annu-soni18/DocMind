@@ -4,9 +4,9 @@ import requests
 from bs4 import BeautifulSoup
 from langchain_core.documents import Document   
 
-# ──────────────────────────────────────────────────────────────
+
 # 1. PDF LOADER
-# ──────────────────────────────────────────────────────────────
+
 
 def load_pdf(uploaded_file) -> list[Document]:
    
@@ -20,14 +20,14 @@ def load_pdf(uploaded_file) -> list[Document]:
 
     for page_num in range(len(pdf)):
         page = pdf[page_num]
-        text = page.get_text()          # extract plain text from this page
+        text = page.get_text()          
 
-        if text.strip():                # skip blank/image-only pages
+        if text.strip():                
             documents.append(Document(
                 page_content=text,
                 metadata={
-                    "source": uploaded_file.name,   # e.g. "machine_learning.pdf"
-                    "page":   page_num + 1          # 1-indexed for human readability
+                    "source": uploaded_file.name,   
+                    "page":   page_num + 1          
                 }
             ))
 
@@ -35,9 +35,9 @@ def load_pdf(uploaded_file) -> list[Document]:
     return documents
 
 
-# ──────────────────────────────────────────────────────────────
+
 # 2. URL LOADER
-# ──────────────────────────────────────────────────────────────
+
 
 def load_url(url: str) -> list[Document]:
     
@@ -86,9 +86,9 @@ def load_url(url: str) -> list[Document]:
         raise ValueError(f"Failed to fetch URL: {e}")
 
 
-# ──────────────────────────────────────────────────────────────
+
 # 3. RAW TEXT LOADER
-# ──────────────────────────────────────────────────────────────
+
 
 def load_text(text: str, label: str = "Pasted Text") -> list[Document]:
    
