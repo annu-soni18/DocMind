@@ -54,7 +54,7 @@ def format_docs_with_sources(docs: list[Document]) -> str:
         source = doc.metadata.get("source", "Unknown Source")
         page   = doc.metadata.get("page", "")
 
-        # If it came from a PDF, show page number too
+        
         if page:
             source_label = f"{source} — page {page}"
         else:
